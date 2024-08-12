@@ -1,0 +1,28 @@
+package uz.dual.paymejava.controller;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import uz.dual.paymejava.config.PayMeConfig;
+import uz.dual.paymejava.dto.PayMeRequestMethod;
+import uz.dual.paymejava.service.PayMeService;
+
+import java.io.IOException;
+
+@RestController
+@RequestMapping("/v1/payme")
+@RequiredArgsConstructor
+public class PayMeController {
+
+    private final PayMeService payMeService;
+    private final PayMeConfig payMeConfig;
+
+    @PostMapping("")
+    public ResponseEntity<?> payMeMain(@RequestBody PayMeRequestMethod method, HttpServletRequest request) throws IOException {
+        if (payMeConfig.isUnauthorized(request.getHeader("Authorization"))) {
+            return ResponseEntity.ok("error");
+        }
+        return ResponseEntity.ok(payMeService.payMeControl(method));
+    }
+}
