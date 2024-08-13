@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.dual.paymejava.config.PayMeConfig;
-import uz.dual.paymejava.dto.PayMeRequestMethod;
+import uz.dual.paymejava.dto.request.PayMeRequestMethod;
 import uz.dual.paymejava.service.PayMeService;
 
 import java.io.IOException;
@@ -19,10 +19,10 @@ public class PayMeController {
     private final PayMeConfig payMeConfig;
 
     @PostMapping("")
-    public ResponseEntity<?> payMeMain(@RequestBody PayMeRequestMethod method, HttpServletRequest request) throws IOException {
-        if (payMeConfig.isUnauthorized(request.getHeader("Authorization"))) {
+    public ResponseEntity<?> payMeMain(@RequestBody PayMeRequestMethod payMeRequest, HttpServletRequest request) throws IOException {
+        if (!payMeConfig.isUnauthorized(request.getHeader("Authorization"))) {
             return ResponseEntity.ok("error");
         }
-        return ResponseEntity.ok(payMeService.payMeControl(method));
+        return ResponseEntity.ok(payMeService.payMeControl(payMeRequest));
     }
 }
