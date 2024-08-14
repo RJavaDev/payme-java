@@ -26,6 +26,8 @@ public class PayMeServiceImpl implements PayMeService {
 
     private final CancelTransactionMethod cancelTransactionMethod;
 
+    private final GetStatementMethod getStatementMethod;
+
     @Override
     public Object payMeControl(PayMeRequestMethod payMeRequest){
         switch (payMeRequest.getMethod()) {
@@ -51,14 +53,10 @@ public class PayMeServiceImpl implements PayMeService {
             }
             case GetStatement -> {
                 GetStatement getStatement = paramsToObject(payMeRequest.getParams(), GetStatement.class);
-                return getStatement(getStatement);
+                return responseWrapper(getStatementMethod.transaction(getStatement));
             }
         }
         return null;
-    }
-
-    private String getStatement(GetStatement getStatement){
-        return getStatement.toString();
     }
 
     private <T> T paramsToObject(Object obj, Class<T> res){

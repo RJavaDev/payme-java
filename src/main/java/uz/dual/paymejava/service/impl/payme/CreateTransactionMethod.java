@@ -3,7 +3,6 @@ package uz.dual.paymejava.service.impl.payme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.dual.paymejava.constantes.PayComTransactionState;
-import uz.dual.paymejava.dto.response.PayComTransactionResponse;
 import uz.dual.paymejava.dto.response.result.CreateTransactionResult;
 import uz.dual.paymejava.entity.PayComPayment;
 import uz.dual.paymejava.exceptions.WorkshopNotFoundException;
