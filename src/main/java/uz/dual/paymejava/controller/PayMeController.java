@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.dual.paymejava.config.PayMeConfig;
 import uz.dual.paymejava.dto.request.PayMeRequestMethod;
+import uz.dual.paymejava.dto.response.result.Error;
+import uz.dual.paymejava.dto.response.result.Result;
 import uz.dual.paymejava.service.PayMeService;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class PayMeController {
     @PostMapping("")
     public ResponseEntity<?> payMeMain(@RequestBody PayMeRequestMethod payMeRequest, HttpServletRequest request) throws IOException {
         if (!payMeConfig.isUnauthorized(request.getHeader("Authorization"))) {
-            return ResponseEntity.ok("error");
+            return ResponseEntity.ok(new Result(new Error(-32504, "Unauthorized", "authorization")));
         }
         return ResponseEntity.ok(payMeService.payMeControl(payMeRequest));
     }

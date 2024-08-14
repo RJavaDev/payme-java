@@ -3,50 +3,51 @@ package uz.dual.paymejava.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uz.dual.paymejava.dto.response.CheckPerformTransactionResponse;
-import uz.dual.paymejava.entity.Workshop;
-import uz.dual.paymejava.exceptions.WorkshopNotFoundException;
-import uz.dual.paymejava.exceptions.WrongAmountException;
+import uz.dual.paymejava.dto.response.PayComTransactionResponse;
+import uz.dual.paymejava.dto.response.result.BaseResult;
 import uz.dual.paymejava.model.*;
 import uz.dual.paymejava.dto.request.PayMeRequestMethod;
-import uz.dual.paymejava.repository.PaymentRepository;
-import uz.dual.paymejava.repository.WorkshopRepository;
 import uz.dual.paymejava.service.PayMeService;
-
-import java.util.Objects;
+import uz.dual.paymejava.service.impl.payme.*;
 
 @Service
 @RequiredArgsConstructor
 public class PayMeServiceImpl implements PayMeService {
 
-    private final PaymentRepository paymentRepository;
-
-    private final WorkshopRepository workshopRepository;
-
     private final ObjectMapper objectMapper;
+
+    private final CheckPerformTransactionMethod checkPerformTransactionMethod;
+
+    private final CreateTransactionMethod createTransactionMethod;
+
+    private final CheckTransactionMethod checkTransactionMethod;
+
+    private final PerformTransactionMethod performTransactionMethod;
+
+    private final CancelTransactionMethod cancelTransactionMethod;
 
     @Override
     public Object payMeControl(PayMeRequestMethod payMeRequest){
         switch (payMeRequest.getMethod()) {
             case CheckPerformTransaction -> {
                 CheckPerformTransaction checkPerformTransaction = paramsToObject(payMeRequest.getParams(), CheckPerformTransaction.class);
-                return checkPerformTransaction(checkPerformTransaction);
+                return responseWrapper(checkPerformTransactionMethod.transaction(checkPerformTransaction));
             }
             case CreateTransaction -> {
                 CreateTransaction createTransaction = paramsToObject(payMeRequest.getParams(), CreateTransaction.class);
-                return createTransaction(createTransaction);
+                return responseWrapper(createTransactionMethod.transaction(createTransaction));
             }
             case PerformTransaction -> {
                 PerformTransaction performTransaction = paramsToObject(payMeRequest.getParams(), PerformTransaction.class);
-                return performTransaction(performTransaction);
+                return responseWrapper(performTransactionMethod.transaction(performTransaction));
             }
             case CheckTransaction -> {
                 CheckTransaction checkTransaction = paramsToObject(payMeRequest.getParams(), CheckTransaction.class);
-                return payMeMethod(checkTransaction);
+                return responseWrapper(checkTransactionMethod.transaction(checkTransaction));
             }
             case CancelTransaction -> {
                 CancelTransaction cancelTransaction = paramsToObject(payMeRequest.getParams(), CancelTransaction.class);
-                return cancelTransaction(cancelTransaction);
+                return responseWrapper(cancelTransactionMethod.transaction(cancelTransaction));
             }
             case GetStatement -> {
                 GetStatement getStatement = paramsToObject(payMeRequest.getParams(), GetStatement.class);
@@ -54,29 +55,6 @@ public class PayMeServiceImpl implements PayMeService {
             }
         }
         return null;
-    }
-
-    public Object checkPerformTransaction(CheckPerformTransaction checkPerformTransaction){
-        checkAmount(checkPerformTransaction.getAmount());
-        workshopRepository.findById(checkPerformTransaction.getAccount().getWorkshopId()).orElseThrow(() -> new WorkshopNotFoundException("workshop not found!"));
-
-        return new CheckPerformTransactionResponse(Boolean.TRUE);
-    }
-
-    public String createTransaction(CreateTransaction createTransaction){
-        return createTransaction.toString();
-    }
-
-    public String performTransaction(PerformTransaction performTransaction){
-        return performTransaction.toString();
-    }
-
-    public String payMeMethod(CheckTransaction checkTransaction){
-        return checkTransaction.toString();
-    }
-
-    public String cancelTransaction(CancelTransaction cancelTransaction){
-        return cancelTransaction.toString();
     }
 
     private String getStatement(GetStatement getStatement){
@@ -87,10 +65,7 @@ public class PayMeServiceImpl implements PayMeService {
         return objectMapper.convertValue(obj, res);
     }
 
-
-    private void checkAmount(Long amount){
-        if(Objects.isNull(amount) || amount < 1){
-            throw new WrongAmountException("amount is null or less than one");
-        }
+    public PayComTransactionResponse responseWrapper(BaseResult result){
+        return new PayComTransactionResponse(result);
     }
 }

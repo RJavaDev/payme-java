@@ -1,4 +1,4 @@
-package uz.dual.paymejava.dto.response;
+package uz.dual.paymejava.dto.response.result;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
