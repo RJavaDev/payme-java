@@ -6,10 +6,13 @@ import uz.dual.paymejava.constantes.PayComTransactionState;
 import uz.dual.paymejava.dto.response.result.CancelTransactionResult;
 import uz.dual.paymejava.dto.response.result.PerformTransactionResult;
 import uz.dual.paymejava.entity.PayComPayment;
+import uz.dual.paymejava.entity.Workshop;
 import uz.dual.paymejava.exceptions.TransactionNotFoundException;
 import uz.dual.paymejava.model.CancelTransaction;
 import uz.dual.paymejava.repository.PayComPaymentRepository;
+import uz.dual.paymejava.repository.WorkshopRepository;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -17,6 +20,9 @@ import java.util.Optional;
 public class CancelTransactionMethod {
 
     private final PayComPaymentRepository payComPaymentRepository;
+
+    private final WorkshopRepository workshopRepository;
+
     public CancelTransactionResult transaction(CancelTransaction cancelTransaction){
         Optional<PayComPayment> comPaymentDB = payComPaymentRepository.getByPayComId(cancelTransaction.getId());
         if(comPaymentDB.isEmpty()){
@@ -33,7 +39,12 @@ public class CancelTransactionMethod {
         if(transaction.getReason() == 3){
             payment.setPayComState(PayComTransactionState.CREATED_CANCELED.getCode());
         } else if (transaction.getReason() == 5) {
-            payment.setPayComState(PayComTransactionState.IMPLEMENTATION_CANCELED.getCode());
+            if(PayComTransactionState.IMPLEMENTATION_CANCELED.getCode() != payment.getPayComState()){
+                payment.setPayComState(PayComTransactionState.IMPLEMENTATION_CANCELED.getCode());
+                Workshop workshop = workshopRepository.findById(payment.getWorkshopId()).orElseThrow(()-> new TransactionNotFoundException("transaction not found!"));
+                workshop.setAccountBalance(workshop.getAccountBalance().subtract(payment.getAmount()));
+                workshopRepository.save(workshop);
+            }
         }
         if(payment.getCancelDateMillisecond() == 0) payment.setCancelDateMillisecond(System.currentTimeMillis());
         payment.setReason(transaction.getReason());

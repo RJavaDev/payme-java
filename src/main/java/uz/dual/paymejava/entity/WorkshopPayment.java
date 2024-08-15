@@ -30,4 +30,6 @@ public class WorkshopPayment extends BaseEntity {
     private Long createdDateMillisecond;
 
     private LocalDateTime createdDate = LocalDateTime.now();
+
+    private String payComTransactionId;
 }
