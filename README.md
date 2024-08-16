@@ -22,5 +22,5 @@ For more details on the Payme API, refer to the official documentation:
 
 ## Test Payme Transactions
 Documentation
-- **For more details on the Payme API, refer to the official documentation:
-  - [Payme Developer Documentation](https://developer.help/paycom.uz)
+For more details on the Payme API, refer to the official documentation:
+- [Payme Developer Documentation](https://developer.help/paycom.uz)
