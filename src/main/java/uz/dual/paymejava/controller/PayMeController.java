@@ -21,7 +21,7 @@ public class PayMeController {
     private final PayMeConfig payMeConfig;
 
     @PostMapping("")
-    public ResponseEntity<?> payMeMain(@RequestBody PayMeRequestMethod payMeRequest, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> payMeMainControl(@RequestBody PayMeRequestMethod payMeRequest, HttpServletRequest request) throws IOException {
         if (!payMeConfig.isUnauthorized(request.getHeader("Authorization"))) {
             return ResponseEntity.ok(new Result(new Error(-32504, "Unauthorized", "authorization")));
         }
