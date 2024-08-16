@@ -17,10 +17,10 @@ This project integrates the Payme payment system into your application. The inte
    git clone https://github.com/yourusername/payme-integration.git
 
 ## Testing
-You can test the Payme integration using the following site:
+For more details on the Payme API, refer to the official documentation:
+- [Test Payme Transactions](https://test.paycom.uz/create-transaction)
 
 ## Test Payme Transactions
 Documentation
-For more details on the Payme API, refer to the official documentation:
-
-Payme Developer Documentation
+- **For more details on the Payme API, refer to the official documentation:
+  - [Payme Developer Documentation](https://developer.help/paycom.uz)
