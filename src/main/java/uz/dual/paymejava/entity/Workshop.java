@@ -1,5 +1,6 @@
 package uz.dual.paymejava.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -17,6 +18,6 @@ public class Workshop extends BaseEntity {
     private String name;
 
     private Long userId;
-
-    private BigDecimal accountBalance;
+    @Column(name = "account_balance", precision = 19, scale = 6)
+    private BigDecimal accountBalance = BigDecimal.ONE;
 }
