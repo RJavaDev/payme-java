@@ -8,7 +8,7 @@ import uz.dual.paymejava.dto.response.result.BaseResult;
 import uz.dual.paymejava.model.*;
 import uz.dual.paymejava.dto.request.PayMeRequestMethod;
 import uz.dual.paymejava.service.PayMeService;
-import uz.dual.paymejava.service.impl.payme.*;
+import uz.dual.paymejava.service.impl.method.*;
 
 @Service
 @RequiredArgsConstructor

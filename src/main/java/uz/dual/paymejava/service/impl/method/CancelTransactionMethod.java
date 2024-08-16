@@ -1,10 +1,9 @@
-package uz.dual.paymejava.service.impl.payme;
+package uz.dual.paymejava.service.impl.method;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.dual.paymejava.constantes.PayComTransactionState;
 import uz.dual.paymejava.dto.response.result.CancelTransactionResult;
-import uz.dual.paymejava.dto.response.result.PerformTransactionResult;
 import uz.dual.paymejava.entity.PayComPayment;
 import uz.dual.paymejava.entity.Workshop;
 import uz.dual.paymejava.exceptions.TransactionNotFoundException;
@@ -12,7 +11,6 @@ import uz.dual.paymejava.model.CancelTransaction;
 import uz.dual.paymejava.repository.PayComPaymentRepository;
 import uz.dual.paymejava.repository.WorkshopRepository;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

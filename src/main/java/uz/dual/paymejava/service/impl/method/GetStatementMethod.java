@@ -1,4 +1,4 @@
-package uz.dual.paymejava.service.impl.payme;
+package uz.dual.paymejava.service.impl.method;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
