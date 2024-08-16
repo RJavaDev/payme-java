@@ -1,5 +1,5 @@
 # Payme Integration
-Assalomu alaykum
+**Assalomu alaykum.**
 This project integrates the Payme payment system into your application. The integration allows you to handle payment requests, process transactions, and manage responses from the Payme platform.
 ## Information
 
