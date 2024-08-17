@@ -1,10 +1,10 @@
 package uz.dual.paymejava.dto.response.result;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
 public class PerformTransactionResult extends BaseResult{
 
     private Long perform_time = 0L;

@@ -8,6 +8,7 @@ import uz.dual.paymejava.config.PayMeConfig;
 import uz.dual.paymejava.dto.request.PayMeRequestMethod;
 import uz.dual.paymejava.dto.response.result.Error;
 import uz.dual.paymejava.dto.response.result.Result;
+import uz.dual.paymejava.exceptions.PayMeUnauthorized;
 import uz.dual.paymejava.service.PayMeService;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class PayMeController {
     @PostMapping("")
     public ResponseEntity<?> payMeMainControl(@RequestBody PayMeRequestMethod payMeRequest, HttpServletRequest request) throws IOException {
         if (!payMeConfig.isUnauthorized(request.getHeader("Authorization"))) {
-            return ResponseEntity.ok(new Result(new Error(-32504, "Unauthorized", "authorization")));
+            throw new PayMeUnauthorized("Unauthorized");
         }
         return ResponseEntity.ok(payMeService.payMeControl(payMeRequest));
     }

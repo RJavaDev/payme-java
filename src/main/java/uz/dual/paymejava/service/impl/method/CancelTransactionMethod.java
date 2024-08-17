@@ -35,14 +35,18 @@ public class CancelTransactionMethod {
 
     private void changeTransactionState(PayComPayment payment, CancelTransaction transaction){
         if(transaction.getReason() == 3){
-            payment.setPayComState(PayComTransactionState.CREATED_CANCELED.getCode());
+            if (PayComTransactionState.CREATED.getCode() == payment.getPayComState())                     // yangi yaratilgan bo'lishi kerak
+                if (PayComTransactionState.CREATED_CANCELED.getCode() != payment.getPayComState()) {      // bekor bo'lmagan bo'lishi kerak
+                    payment.setPayComState(PayComTransactionState.CREATED_CANCELED.getCode());
+                }
         } else if (transaction.getReason() == 5) {
-            if(PayComTransactionState.IMPLEMENTATION_CANCELED.getCode() != payment.getPayComState()){
-                payment.setPayComState(PayComTransactionState.IMPLEMENTATION_CANCELED.getCode());
-                Workshop workshop = workshopRepository.findById(payment.getWorkshopId()).orElseThrow(()-> new TransactionNotFoundException("transaction not found!"));
-                workshop.setAccountBalance(workshop.getAccountBalance().subtract(payment.getAmount()));
-                workshopRepository.save(workshop);
-            }
+            if (PayComTransactionState.IMPLEMENTATION_CANCELED.getCode() != payment.getPayComState()) // oldin bekor qilinmagan bo'lsa
+                if (PayComTransactionState.IMPLEMENTATION.getCode() == payment.getPayComState()) {    // amalga oshirilgan bo'lsihi kerak
+                    payment.setPayComState(PayComTransactionState.IMPLEMENTATION_CANCELED.getCode());
+                    Workshop workshop = workshopRepository.findById(payment.getWorkshopId()).orElseThrow(() -> new TransactionNotFoundException("transaction not found!"));
+                    workshop.setAccountBalance(workshop.getAccountBalance().subtract(payment.getAmount()));
+                    workshopRepository.save(workshop);
+                }
         }
         if(payment.getCancelDateMillisecond() == 0) payment.setCancelDateMillisecond(System.currentTimeMillis());
         payment.setReason(transaction.getReason());

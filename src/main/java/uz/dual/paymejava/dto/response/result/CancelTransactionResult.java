@@ -2,9 +2,11 @@ package uz.dual.paymejava.dto.response.result;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@EqualsAndHashCode(callSuper = false)
-@Data
+@Getter
+@Setter
 public class CancelTransactionResult extends BaseResult{
     private String transaction;
     private Long cancel_time;

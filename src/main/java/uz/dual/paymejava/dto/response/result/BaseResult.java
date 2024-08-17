@@ -1,8 +1,10 @@
 package uz.dual.paymejava.dto.response.result;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class BaseResult {
     private String transaction;
 }

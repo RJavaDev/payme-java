@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import uz.dual.paymejava.dto.response.result.Error;
 import uz.dual.paymejava.dto.response.result.Result;
+import uz.dual.paymejava.exceptions.PayMeUnauthorized;
 import uz.dual.paymejava.exceptions.TransactionNotFoundException;
 import uz.dual.paymejava.exceptions.WorkshopNotFoundException;
 import uz.dual.paymejava.exceptions.WrongAmountException;
@@ -25,5 +26,10 @@ public class ExceptionHandlerController {
     @ExceptionHandler({TransactionNotFoundException.class})
     private ResponseEntity<?> handler(TransactionNotFoundException e) {
         return ResponseEntity.ok(new Result(new Error(-31003, e.getMessage(), "transaction")));
+    }
+
+    @ExceptionHandler({PayMeUnauthorized.class})
+    private ResponseEntity<?> handler(PayMeUnauthorized e) {
+        return ResponseEntity.ok(new Result(new Error(-32504, e.getMessage(), "authorization")));
     }
 }
